@@ -2,6 +2,7 @@ const app = require('../app')
 const db = require('../db/connection')
 const request = require('supertest')
 const seed = require ('../db/seeds/seed')
+
 const {articleData,commentData, topicData, userData} = require('../db/data/test-data/index')
 
 beforeEach(() =>{
@@ -52,3 +53,41 @@ describe('Testing general errors',() =>{
     })
 })
     })
+
+describe('Testing for All Api list',() =>{
+    test('Expect to return a status of 200 when ran correctly',() =>{
+        return request(app)
+        .get('/api')
+        .expect(200)
+    })
+    test('Expect to return an object',() =>{
+        return request(app)
+        .get('/api')
+        .expect(200)    
+        .then(({body}) =>{
+            expect(typeof({body})).toBe('object')
+        })
+    })
+    test('expect to be able to access the example responses in the array and the queries ',() =>{
+        return request(app)
+        .get('/api')
+        .expect(200)    
+        .then(({body}) =>{
+            expect(body.endPointJson['GET /api/articles'].exampleResponse).toEqual({
+                "articles": [
+                  {
+                    "title": "Seafood substitutions are increasing",
+                    "topic": "cooking",
+                    "author": "weegembump",
+                    "body": "Text from the article..",
+                    "created_at": "2018-05-30T15:59:13.341Z",
+                    "votes": 0,
+                    "comment_count": 6
+                  }
+                ]
+              })
+              expect(body.endPointJson['GET /api/articles'].queries).toEqual(["author", "topic", "sort_by", "order"])
+              expect(body.endPointJson['GET /api'].description).toBe('serves up a json representation of all the available endpoints of the api')
+        })
+    })
+})
