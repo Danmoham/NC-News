@@ -117,15 +117,15 @@ describe('Checks for valid ID returns the correct Article', () =>{
     })
     test('Tests for bad request if invalid response given',() =>{
         return request(app)
-        .get('/api/articles/12421')
+        .get('/api/articles/giwigd')
         .expect(400).then((response) =>{
-            expect(response.body.msg).toBe('Bad request')
+            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
         })
     })
     test('Tests for invalid input',() =>{
-        return request(app).get('/api/articles/hello')
+        return request(app).get('/api/articles/7399')
         .expect(404).then((response) =>{
-            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number!')
+            expect(response.body.msg).toBe('Key not available')
         })
     })
 
