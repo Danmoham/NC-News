@@ -122,5 +122,11 @@ describe('Checks for valid ID returns the correct Article', () =>{
             expect(response.body.msg).toBe('Bad request')
         })
     })
+    test('Tests for invalid input',() =>{
+        return request(app).get('/api/articles/hello')
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number!')
+        })
+    })
 
 })

@@ -6,6 +6,14 @@ exports.fetchAllTopics = () =>{
     })
 }
 exports.fetchArticleById = (id) =>{
+    const checkerId = parseInt(id)
+    if (isNaN(checkerId)){
+        return Promise.reject ({
+            status : 404,
+            message : "URL does not exist, the key you gave is not a number!"
+
+        })
+    }else{
     return db.query(`SELECT * FROM articles WHERE article_id = $1`,[id])
     .then(({rows}) =>{
         if (rows.length === 0){
@@ -17,4 +25,5 @@ exports.fetchArticleById = (id) =>{
         }
         return rows[0]
     })
+}
 }
