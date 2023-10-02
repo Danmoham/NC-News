@@ -86,8 +86,47 @@ describe('Testing for All Api list',() =>{
                   }
                 ]
               })
+
               expect(body.endPointJson['GET /api/articles'].queries).toEqual(["author", "topic", "sort_by", "order"])
+
               expect(body.endPointJson['GET /api'].description).toBe('serves up a json representation of all the available endpoints of the api')
         })
     })
+})
+
+describe('Checks for valid ID returns the correct Article', () =>{
+    test('Tests that correct ID returns a Article',() =>{
+        return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({body}) =>{
+            expect(typeof (body.myArticle.article_id)).toBe('number')
+            expect(typeof (body.myArticle.title)).toBe('string')
+            expect(typeof(body.myArticle.topic)).toBe("string")
+            expect(typeof(body.myArticle.body)).toBe('string')
+            expect(typeof(body.myArticle.created_at)).toBe('string')
+            expect(typeof(body.myArticle.votes)).toBe('number')
+            expect(typeof(body.myArticle.article_img_url)).toBe('string')
+            expect((body.myArticle.article_id)).toBe(1)
+            expect((body.myArticle.topic)).toBe("mitch")
+            expect((body.myArticle.title)).toBe('Living in the shadow of a great man')
+            expect((body.myArticle.created_at)).toBe('2020-07-09T20:11:00.000Z')
+            expect((body.myArticle.votes)).toBe(100)
+            expect((body.myArticle.article_img_url)).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
+        })
+    })
+    test('Tests for bad request if invalid response given',() =>{
+        return request(app)
+        .get('/api/articles/12421')
+        .expect(400).then((response) =>{
+            expect(response.body.msg).toBe('Bad request')
+        })
+    })
+    test('Tests for invalid input',() =>{
+        return request(app).get('/api/articles/hello')
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number!')
+        })
+    })
+
 })
