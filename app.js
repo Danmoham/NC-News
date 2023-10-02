@@ -1,5 +1,4 @@
 const express = require('express')
-const seed = require('./db/seeds/seed')
 const {getAllTopics} = require('./controllers/controllers')
 
 const app = express()
