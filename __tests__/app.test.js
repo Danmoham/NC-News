@@ -130,3 +130,47 @@ describe('Checks for valid ID returns the correct Article', () =>{
     })
 
 })
+describe('Checks all Articles for the NC news',() =>{
+    test('Testing it returns all articles with the following properties author title, article_id, topic,created_at,votes, article_img_url, comment_count',() =>{
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({body}) =>{
+            body.article.forEach((article) =>{
+                expect(typeof(article.title)).toBe('string')
+                expect(typeof(article.author)).toBe('string')
+                expect(typeof(article.article_id)).toBe('number')
+                expect(typeof(article.created_at)).toBe('string')
+                expect(typeof(article.votes)).toBe('number')
+                expect(typeof(article.topic)).toBe('string')
+                expect(typeof(article.article_img_url)).toBe('string')
+                expect(typeof(article.comment_count)).toBe('number')
+            })
+        })
+    })
+    test('Testing specific comments are correct',() =>{
+        return request(app)
+        .get('/api/articles')
+        .then(({body}) =>{
+            const myArticles = body.article
+            for (let i = 0; i < myArticles.length;i++){
+                if (myArticles[i].article_id === 5){
+                    expect(myArticles[i].comment_count === 2)
+                }else if (myArticles[i].article_id === 6){
+                    expect(myArticles[i].comment_count === 1)
+                }else if (myArticles[i].article_id === 4){
+                    expect(myArticles[i].comment_count === 0)
+                }
+            }
+        })
+    })
+    test.only('Testing order by works',() =>{
+        return request(app)
+        .get('/api/articles')
+        .then(({body}) =>{
+           expect(body.article[0].created_at).toBe('2020-11-03T09:12:00.000Z')
+           expect(body.article[body.article.length-1].created_at).toBe('2020-06-06T09:10:00.000Z')
+        })
+    })
+
+})
