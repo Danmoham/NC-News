@@ -168,6 +168,7 @@ describe('Checks all Articles for the NC news',() =>{
         return request(app)
         .get('/api/articles')
         .then(({body}) =>{
+           expect(body.article).toBeSortedBy('created_at', { descending : true})
            expect(body.article[0].created_at).toBe('2020-11-03T09:12:00.000Z')
            expect(body.article[body.article.length-1].created_at).toBe('2020-06-06T09:10:00.000Z')
         })
