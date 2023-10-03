@@ -1,6 +1,6 @@
 const express = require('express')
 const seed = require('./db/seeds/seed')
-const {getAllTopics, getAllApi, getArticleByArticleId, getAllArticles} = require('./controllers/controllers')
+const {getAllTopics, getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments} = require('./controllers/controllers')
 
 const app = express()
 
@@ -8,6 +8,7 @@ app.get('/api/topics',getAllTopics)
 app.get('/api', getAllApi)
 app.get('/api/articles/:article_id',getArticleByArticleId)
 app.get('/api/articles',getAllArticles)
+app.get('/api/articles/:article_id/comments',getArticleIdComments)
 
 
 app.all('/*',(request, response) =>{
