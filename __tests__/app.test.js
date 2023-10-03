@@ -4,6 +4,7 @@ const request = require('supertest')
 const seed = require ('../db/seeds/seed')
 
 const {articleData,commentData, topicData, userData} = require('../db/data/test-data/index')
+const articles = require('../db/data/test-data/articles')
 
 beforeEach(() =>{
     return seed({topicData, userData, articleData, commentData})
@@ -136,15 +137,16 @@ describe('Checks all Articles for the NC news',() =>{
         .get('/api/articles')
         .expect(200)
         .then(({body}) =>{
-            body.article.forEach((article) =>{
-                expect(typeof(article.title)).toBe('string')
-                expect(typeof(article.author)).toBe('string')
-                expect(typeof(article.article_id)).toBe('number')
-                expect(typeof(article.created_at)).toBe('string')
-                expect(typeof(article.votes)).toBe('number')
-                expect(typeof(article.topic)).toBe('string')
-                expect(typeof(article.article_img_url)).toBe('string')
-                expect(typeof(article.comment_count)).toBe('number')
+            body.articles.forEach((articles) =>{
+                expect(body.articles.length).toBe(13)
+                expect(typeof(articles.title)).toBe('string')
+                expect(typeof(articles.author)).toBe('string')
+                expect(typeof(articles.article_id)).toBe('number')
+                expect(typeof(articles.created_at)).toBe('string')
+                expect(typeof(articles.votes)).toBe('number')
+                expect(typeof(articles.topic)).toBe('string')
+                expect(typeof(articles.article_img_url)).toBe('string')
+                expect(typeof(articles.comment_count)).toBe('number')
             })
         })
     })
@@ -152,7 +154,7 @@ describe('Checks all Articles for the NC news',() =>{
         return request(app)
         .get('/api/articles')
         .then(({body}) =>{
-            const myArticles = body.article
+            const myArticles = body.articles
             for (let i = 0; i < myArticles.length;i++){
                 if (myArticles[i].article_id === 5){
                     expect(myArticles[i].comment_count === 2)
@@ -168,9 +170,7 @@ describe('Checks all Articles for the NC news',() =>{
         return request(app)
         .get('/api/articles')
         .then(({body}) =>{
-           expect(body.article).toBeSortedBy('created_at', { descending : true})
-           expect(body.article[0].created_at).toBe('2020-11-03T09:12:00.000Z')
-           expect(body.article[body.article.length-1].created_at).toBe('2020-06-06T09:10:00.000Z')
+           expect(body.articles).toBeSortedBy('created_at', { descending : true})
         })
     })
 
