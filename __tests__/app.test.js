@@ -150,10 +150,11 @@ describe('Checks all Articles for the NC news',() =>{
             })
         })
     })
-    test('Testing specific comments are correct',() =>{
+    test('Testing specific comments are correct and the by order works',() =>{
         return request(app)
         .get('/api/articles')
         .then(({body}) =>{
+            expect(body.articles).toBeSortedBy('created_at', { descending : true})
             const myArticles = body.articles
             for (let i = 0; i < myArticles.length;i++){
                 if (myArticles[i].article_id === 5){
@@ -166,12 +167,6 @@ describe('Checks all Articles for the NC news',() =>{
             }
         })
     })
-    test('Testing order by works',() =>{
-        return request(app)
-        .get('/api/articles')
-        .then(({body}) =>{
-           expect(body.articles).toBeSortedBy('created_at', { descending : true})
-        })
-    })
+    
 
 })
