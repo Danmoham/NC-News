@@ -27,3 +27,14 @@ exports.fetchAllArticles = () =>{
     })
 }
 
+exports.fetchArticleIdComments = (id) =>{
+    return db.query(`Select * From comments WHERE comments.article_id = $1 ORDER BY created_at DESC`,[id]).then(({rows}) =>{
+        if (rows.length === 0){
+            return Promise.reject ({
+                status : 404,
+                message : "This article has no comments"
+
+            })}
+        return rows
+    })
+}

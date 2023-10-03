@@ -175,3 +175,37 @@ describe('Checks all Articles for the NC news',() =>{
     })
 
 })
+describe('checks specific articles comments',() =>{
+    test('Response with correct comments',() =>{
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({body}) =>{
+            expect(body.myComments.length).toBe(11)
+            expect(body.myComments).toBeSortedBy('created_at', { descending : true})
+        body.myComments.forEach((comment) =>{
+            expect(typeof(comment.comment_id)).toBe('number')
+            expect(typeof(comment.body)).toBe('string')
+            expect(typeof(comment.article_id)).toBe('number')
+            expect(typeof(comment.author)).toBe('string')
+            expect(typeof(comment.votes)).toBe('number')
+            expect(typeof(comment.created_at)).toBe('string')
+        })
+        })
+       
+    })
+    test('Expect bad request to return error status',() =>{
+        return request(app)
+        .get('/api/articles/NaN/comments')
+        .expect(400).then((response) =>{
+            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
+        })
+    })
+    test('Expect 404 not found error for no comments',() =>{
+        return request(app)
+        .get('/api/articles/4/comments')
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('This article has no comments')
+        })
+    })
+})
