@@ -1,4 +1,4 @@
-const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments} = require('../models/models')
+const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle} = require('../models/models')
 const endPointJson = require('../endpoints.json')
 exports.getAllTopics = (realRequest,realResponse,next) =>{
     fetchAllTopics().then((topic) =>{
@@ -26,11 +26,30 @@ exports.getAllArticles = (realRequest,realResponse,next) =>{
 }
 exports.getArticleIdComments = (realRequest,realResponse,next) =>{
     const {params} = realRequest
-    fetchArticleIdComments(params.article_id)
+    const promises = [fetchArticleById(params.article_id)]
+    if (params.article_id){
+        promises.push(fetchArticleIdComments(params.article_id))
+    } 
+    Promise.all(promises) 
     .then((myComments) =>{
-    realResponse.status(200).send({myComments: myComments})
+    realResponse.status(200).send({myComments: myComments[1]})
     })
     .catch((err) => {
         next(err)
     })
+}
+exports.postCommentsToArticle = (realRequest,realResponse,next) =>{
+    const {params} = realRequest
+    const promises = [fetchArticleById(params.article_id)]
+    if (params.article_id){
+        promises.push(addCommentsToArticle(realRequest.params.article_id,realRequest.body))
+    }
+    Promise.all(promises)        
+    .then((result) =>{
+        realResponse.status(201).send(result[1])
+    })
+   .catch((err) =>{
+    next(err)
+    } ) 
+
 }

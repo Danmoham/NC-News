@@ -4,7 +4,6 @@ const request = require('supertest')
 const seed = require ('../db/seeds/seed')
 
 const {articleData,commentData, topicData, userData} = require('../db/data/test-data/index')
-
 beforeEach(() =>{
     return seed({topicData, userData, articleData, commentData})
 })
@@ -201,11 +200,70 @@ describe('checks specific articles comments',() =>{
             expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
         })
     })
-    test('Expect 404 not found error for no comments',() =>{
+    test('Expect 200 for no comments',() =>{
         return request(app)
         .get('/api/articles/4/comments')
-        .expect(404).then((response) =>{
-            expect(response.body.msg).toBe('This article has no comments')
+        .expect(200).then((response) =>{
+            expect(response.body.myComments).toEqual([])
         })
     })
+    test('expect 404 error for an id that does not exist',() =>{
+        return request(app)
+        .get('/api/articles/9999/comments')
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('Key not available')})
+    })
 })
+
+describe('posting a new comment to a specific article',() =>{
+    test('testing it returns a 201 status',() =>{
+        const myPost = {
+            username : "butter_bridge",
+            body : "Great article"
+        }
+        return request(app)
+        .post('/api/articles/4/comments').send(myPost)
+        .expect(201)
+        .then((result) =>{
+            expect(result._body.comment_id).toBe(19)
+            expect(result._body.body).toBe('Great article')
+            expect(result._body.article_id).toBe(4)
+            expect(result._body.author).toBe('butter_bridge')
+            expect(result._body.votes).toBe(0)
+            expect(typeof(result._body.created_at)).toBe('string')
+        })
+    })
+    test('Test for username who does not exist',() =>{
+        const myPost = {
+            username : "dan",
+            body : "Great article"
+        }
+        return request(app)
+        .post('/api/articles/4/comments').send(myPost)
+        .expect(404).then((response) =>{
+        expect(response.body.msg).toBe('The name you gave is not a current user')
+    })
+    })
+    test('Tests for an invalid comment',() =>{
+        const myPost = {
+            username : "butter_bridge",
+            body : "Great article"
+        }
+        return request(app)
+        .post('/api/articles/bvifb/comments').send(myPost)
+        .expect(400).then((response) =>{
+            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
+        })
+    })
+    test('Tests for an article not existing',() =>{
+        const myPost = {
+            username : "butter_bridge",
+            body : "Great article"
+        }
+        return request(app)
+        .post('/api/articles/9999/comments').send(myPost)
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('Key not available')})
+    })
+    })
+    
