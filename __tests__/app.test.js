@@ -137,6 +137,7 @@ describe('Checks all Articles for the NC news',() =>{
         .get('/api/articles')
         .expect(200)
         .then(({body}) =>{
+            console.log(body.articles)
             body.articles.forEach((articles) =>{
                 expect(body.articles.length).toBe(13)
                 expect(typeof(articles.title)).toBe('string')
