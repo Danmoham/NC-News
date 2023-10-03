@@ -164,7 +164,7 @@ describe('Checks all Articles for the NC news',() =>{
             }
         })
     })
-    test.only('Testing order by works',() =>{
+    test('Testing order by works',() =>{
         return request(app)
         .get('/api/articles')
         .then(({body}) =>{
