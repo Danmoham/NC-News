@@ -202,6 +202,7 @@ describe('checks specific articles comments',() =>{
         .get('/api/articles/4/comments')
         .expect(200).then((response) =>{
             expect(response.body.myComments).toEqual([])
+
         })
     })
     test('expect 404 error for an id that does not exist',() =>{
@@ -361,3 +362,5 @@ describe('Deleting a comment',() =>{
           
         })
 
+        })
+    })
