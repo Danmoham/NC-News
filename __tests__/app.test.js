@@ -188,6 +188,7 @@ describe('checks specific articles comments',() =>{
             expect(typeof(comment.created_at)).toBe('string')
         })
     })
+})
 
 })
 describe('checks specific articles comments',() =>{
