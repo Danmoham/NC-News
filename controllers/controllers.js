@@ -1,4 +1,4 @@
-const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle} = require('../models/models')
+const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount} = require('../models/models')
 const endPointJson = require('../endpoints.json')
 exports.getAllTopics = (realRequest,realResponse,next) =>{
     fetchAllTopics().then((topic) =>{
@@ -48,3 +48,15 @@ exports.postCommentsToArticle = (realRequest,realResponse,next) =>{
     } ) 
 
 }
+exports.patchArticleId = (realRequest,realResponse,next) =>{
+    const {params} = realRequest
+    patchVoteCount(params.article_id, realRequest.body.inc_votes).then((result) =>{
+        realResponse.status(200).send({updatedArticle : result})
+
+    })
+    .catch((err) =>{
+        next(err)
+    })
+  
+}
+

@@ -120,7 +120,7 @@ describe('Checks for valid ID returns the correct Article', () =>{
         return request(app)
         .get('/api/articles/giwigd')
         .expect(400).then((response) =>{
-            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
+            expect(response.body.msg).toBe('The key you gave is not a number - Bad Request!')
         })
     })
     test('Tests for invalid input',() =>{
@@ -194,7 +194,7 @@ describe('checks specific articles comments',() =>{
         return request(app)
         .get('/api/articles/NaN/comments')
         .expect(400).then((response) =>{
-            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
+            expect(response.body.msg).toBe('The key you gave is not a number - Bad Request!')
         })
     })
     test('Expect 200 for no comments',() =>{
@@ -250,7 +250,7 @@ describe('posting a new comment to a specific article',() =>{
         return request(app)
         .post('/api/articles/bvifb/comments').send(myPost)
         .expect(400).then((response) =>{
-            expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
+            expect(response.body.msg).toBe('The key you gave is not a number - Bad Request!')
         })
     })
     test('Tests for an article not existing',() =>{
@@ -265,14 +265,60 @@ describe('posting a new comment to a specific article',() =>{
     })
     })
     
-        })
-    })
-    test('expect 404 error for an id that does not exist',() =>{
-        return request(app)
-        .get('/api/articles/9999/comments')
-        .expect(404).then((response) =>{
-            expect(response.body.msg).toBe('Key not available')})
+describe('Patching an article id',() =>{
+test('Test an article returns updated with status 200 code',() =>{
+    const voteUpdate = {
+        inc_votes : 2
+    }
+   return request(app).patch('/api/articles/1')
+   .send(voteUpdate)
+   .expect(200)
+   .then (({body}) => {
+    expect(body.updatedArticle).toMatchObject({
+        article_id : 1,
+        topic : "mitch",
+        votes : 102
     })
 })
-
-
+})
+test('Testing article without a votes status already on it',() =>{
+    const voteUpdate = {
+        inc_votes : 2
+    }
+   return request(app).patch('/api/articles/2')
+   .send(voteUpdate)
+   .expect(200)
+   .then (({body}) => {
+    expect(body.updatedArticle).toMatchObject({
+        article_id : 2,
+        votes :2 
+    })
+}) 
+})
+test('Testing for invalid votes key',() =>{
+    const voteUpdate = {
+        inc_votes : "hi"
+    }
+   return request(app).patch('/api/articles/2')
+   .send(voteUpdate)
+   .expect(400)
+   .then ((response) => {
+    expect(response.body.msg).toBe("The key you gave is not a number - Bad Request!")
+   
+})
+   })
+test('Testing for 404 error',() =>{
+    const voteUpdate = {
+        inc_votes : 2
+    }
+   return request(app).patch('/api/articles/898937')
+   .send(voteUpdate)
+   .expect(404)
+   .then ((response) => {
+    expect(response.body.msg).toBe("Key not available")
+   
+})
+})
+})
+        })
+    })
