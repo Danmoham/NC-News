@@ -318,4 +318,15 @@ test('Testing for 404 error',() =>{
    
 })
 })
+test('Test for invalid ID',() =>{
+    const voteUpdate = {
+        inc_votes : 2
+    }
+   return request(app).patch('/api/articles/addd')
+   .send(voteUpdate)
+   .expect(400)
+   .then ((response) => {
+    expect(response.body.msg).toBe("The key you gave is not a number - Bad Request!")
+})
+})
 })
