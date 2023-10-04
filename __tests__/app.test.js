@@ -201,11 +201,21 @@ describe('checks specific articles comments',() =>{
             expect(response.body.msg).toBe('URL does not exist, the key you gave is not a number - Bad Request!')
         })
     })
-    test('Expect 404 not found error for no comments',() =>{
+    test('Expect 200 for no comments',() =>{
         return request(app)
         .get('/api/articles/4/comments')
-        .expect(404).then((response) =>{
-            expect(response.body.msg).toBe('This article has no comments')
+        .expect(200).then((response) =>{
+            expect(response.body.myComments).toEqual([])
         })
     })
+    test('expect 404 error for an id that does not exist',() =>{
+        return request(app)
+        .get('/api/articles/9999/comments')
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('Key not available')})
+    })
+})
+
+describe('posting a new comment to a specific article',() =>{
+
 })

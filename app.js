@@ -10,7 +10,6 @@ app.get('/api/articles/:article_id',getArticleByArticleId)
 app.get('/api/articles',getAllArticles)
 app.get('/api/articles/:article_id/comments',getArticleIdComments)
 
-
 app.all('/*',(request, response) =>{
     response.status(404).send({ msg: 'URL does not exist'})
   })

@@ -26,9 +26,13 @@ exports.getAllArticles = (realRequest,realResponse,next) =>{
 }
 exports.getArticleIdComments = (realRequest,realResponse,next) =>{
     const {params} = realRequest
-    fetchArticleIdComments(params.article_id)
+    const promises = [fetchArticleById(params.article_id)]
+    if (params.article_id){
+        promises.push(fetchArticleIdComments(params.article_id))
+    } 
+    Promise.all(promises) 
     .then((myComments) =>{
-    realResponse.status(200).send({myComments: myComments})
+    realResponse.status(200).send({myComments: myComments[1]})
     })
     .catch((err) => {
         next(err)
