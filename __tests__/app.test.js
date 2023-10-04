@@ -137,7 +137,6 @@ describe('Checks all Articles for the NC news',() =>{
         .get('/api/articles')
         .expect(200)
         .then(({body}) =>{
-            console.log(body.articles)
             body.articles.forEach((articles) =>{
                 expect(body.articles.length).toBe(13)
                 expect(typeof(articles.title)).toBe('string')
@@ -171,26 +170,7 @@ describe('Checks all Articles for the NC news',() =>{
     
 
 })
-describe('checks specific articles comments',() =>{
-    test('Response with correct comments',() =>{
-        return request(app)
-        .get('/api/articles/1/comments')
-        .expect(200)
-        .then(({body}) =>{
-            expect(body.myComments.length).toBe(11)
-            expect(body.myComments).toBeSortedBy('created_at', { descending : true})
-        body.myComments.forEach((comment) =>{
-            expect(typeof(comment.comment_id)).toBe('number')
-            expect(typeof(comment.body)).toBe('string')
-            expect(typeof(comment.article_id)).toBe('number')
-            expect(typeof(comment.author)).toBe('string')
-            expect(typeof(comment.votes)).toBe('number')
-            expect(typeof(comment.created_at)).toBe('string')
-        })
-    })
-})
 
-})
 describe('checks specific articles comments',() =>{
     test('Response with correct comments',() =>{
         return request(app)
@@ -243,11 +223,11 @@ describe('posting a new comment to a specific article',() =>{
         .post('/api/articles/4/comments').send(myPost)
         .expect(201)
         .then((result) =>{
-            expect(result._body.comment_id).toBe(19)
-            expect(result._body.body).toBe('Great article')
-            expect(result._body.article_id).toBe(4)
-            expect(result._body.author).toBe('butter_bridge')
-            expect(result._body.votes).toBe(0)
+            expect(result.body.comment_id).toBe(19)
+            expect(result.body.body).toBe('Great article')
+            expect(result.body.article_id).toBe(4)
+            expect(result.body.author).toBe('butter_bridge')
+            expect(result.body.votes).toBe(0)
             expect(typeof(result._body.created_at)).toBe('string')
         })
     })
@@ -259,10 +239,10 @@ describe('posting a new comment to a specific article',() =>{
         return request(app)
         .post('/api/articles/4/comments').send(myPost)
         .expect(404).then((response) =>{
-        expect(response.body.msg).toBe('The name you gave is not a current user')
+        expect(response.body.msg).toBe('Part of your request is invalid')
     })
     })
-    test('Tests for an invalid comment',() =>{
+    test('Tests for an invalid id',() =>{
         const myPost = {
             username : "butter_bridge",
             body : "Great article"
@@ -281,7 +261,7 @@ describe('posting a new comment to a specific article',() =>{
         return request(app)
         .post('/api/articles/9999/comments').send(myPost)
         .expect(404).then((response) =>{
-            expect(response.body.msg).toBe('Key not available')})
+            expect(response.body.msg).toBe('Part of your request is invalid')})
     })
     })
     
