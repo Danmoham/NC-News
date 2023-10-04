@@ -39,14 +39,9 @@ exports.getArticleIdComments = (realRequest,realResponse,next) =>{
     })
 }
 exports.postCommentsToArticle = (realRequest,realResponse,next) =>{
-    const {params} = realRequest
-    const promises = [fetchArticleById(params.article_id)]
-    if (params.article_id){
-        promises.push(addCommentsToArticle(realRequest.params.article_id,realRequest.body))
-    } 
-    Promise.all(promises)
+    addCommentsToArticle(realRequest.params.article_id,realRequest.body)      
     .then((result) =>{
-        realResponse.status(201).send(result[1])
+        realResponse.status(201).send(result)
     })
    .catch((err) =>{
     next(err)

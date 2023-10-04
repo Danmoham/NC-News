@@ -222,11 +222,11 @@ describe('posting a new comment to a specific article',() =>{
         .post('/api/articles/4/comments').send(myPost)
         .expect(201)
         .then((result) =>{
-            expect(result._body.comment_id).toBe(19)
-            expect(result._body.body).toBe('Great article')
-            expect(result._body.article_id).toBe(4)
-            expect(result._body.author).toBe('butter_bridge')
-            expect(result._body.votes).toBe(0)
+            expect(result.body.comment_id).toBe(19)
+            expect(result.body.body).toBe('Great article')
+            expect(result.body.article_id).toBe(4)
+            expect(result.body.author).toBe('butter_bridge')
+            expect(result.body.votes).toBe(0)
             expect(typeof(result._body.created_at)).toBe('string')
         })
     })
@@ -238,7 +238,7 @@ describe('posting a new comment to a specific article',() =>{
         return request(app)
         .post('/api/articles/4/comments').send(myPost)
         .expect(404).then((response) =>{
-        expect(response.body.msg).toBe('The name you gave is not a current user')
+        expect(response.body.msg).toBe('Part of your request is invalid')
     })
     })
     test('Tests for an invalid id',() =>{
@@ -260,7 +260,7 @@ describe('posting a new comment to a specific article',() =>{
         return request(app)
         .post('/api/articles/9999/comments').send(myPost)
         .expect(404).then((response) =>{
-            expect(response.body.msg).toBe('Key not available')})
+            expect(response.body.msg).toBe('Part of your request is invalid')})
     })
     })
     
