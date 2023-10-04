@@ -1,5 +1,6 @@
 const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment} = require('../models/models')
 const endPointJson = require('../endpoints.json')
+const { query } = require('../db/connection')
 exports.getAllTopics = (realRequest,realResponse,next) =>{
     fetchAllTopics().then((topic) =>{
         realResponse.status(200).send({myTopics : topic})
@@ -20,8 +21,12 @@ exports.getArticleByArticleId = (realRequest,realResponse,next) =>{
 
 }
 exports.getAllArticles = (realRequest,realResponse,next) =>{
-    fetchAllArticles().then((article) =>{
+    const {query} = realRequest
+    fetchAllArticles(query).then((article) =>{
         realResponse.status(200).send({articles : article})
+    })
+    .catch((err) =>{
+        next(err)
     })
 }
 exports.getArticleIdComments = (realRequest,realResponse,next) =>{

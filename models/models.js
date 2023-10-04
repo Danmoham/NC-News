@@ -17,11 +17,19 @@ exports.fetchArticleById = (id) =>{
     })
   
 }
-exports.fetchAllArticles = () =>{
+exports.fetchAllArticles = (query) =>{
+    if ((Object.keys(query).length) === 0){
     return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id
     GROUP BY articles.article_id ORDER BY articles.created_at DESC`).then(({rows}) =>{
         return rows
-    })
+    })}else{
+        if ((Object.keys(query)[0]) !== "topic"){
+            return reject404()
+        }
+        return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE topic = $1 GROUP BY articles.article_id ORDER BY articles.created_at DESC`,[query.topic]).then(({rows}) =>{
+            return rows
+        })
+        }
 }
 
 exports.fetchArticleIdComments = (id) =>{
