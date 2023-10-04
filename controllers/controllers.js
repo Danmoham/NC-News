@@ -20,8 +20,8 @@ exports.getArticleByArticleId = (realRequest,realResponse,next) =>{
 
 }
 exports.getAllArticles = (realRequest,realResponse,next) =>{
-    fetchAllArticles().then((article) =>{
-        realResponse.status(200).send({article : article})
+    fetchAllArticles().then((articles) =>{
+        realResponse.status(200).send({articles : articles})
     })
 }
 exports.getArticleIdComments = (realRequest,realResponse,next) =>{

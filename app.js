@@ -2,6 +2,7 @@ const express = require('express')
 const seed = require('./db/seeds/seed')
 const {getAllTopics, getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments, postCommentsToArticle} = require('./controllers/controllers')
 
+
 const app = express()
 
 app.use(express.json())
