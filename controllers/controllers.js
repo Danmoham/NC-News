@@ -69,4 +69,7 @@ exports.deleteComment = (realRequest,realResponse,next) =>{
     })
     
 }
+exports.getAllUsers = (realRequest,realResponse,next) =>{
+    return true
+}
 
