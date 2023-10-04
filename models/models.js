@@ -1,4 +1,5 @@
 const db = require('../db/connection')
+const { reject404 } = require('./myUtils')
 exports.fetchAllTopics = () =>{
     return db.query('SELECT * FROM topics')
     .then(({rows}) =>{
@@ -10,11 +11,7 @@ exports.fetchArticleById = (id) =>{
     return db.query(`SELECT * FROM articles WHERE article_id = $1`,[id])
     .then(({rows}) =>{
         if (rows.length === 0){
-            return Promise.reject ({
-                status : 404,
-                message : "Key not available"
-
-            })
+           return reject404()
         }
         return rows[0]
     })
@@ -40,13 +37,17 @@ exports.addCommentsToArticle = (id,comment) =>{
 exports.patchVoteCount = (id, increment) =>{
    return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`,[increment, id]).then(({rows}) =>{
     if (rows.length === 0){
-        return Promise.reject ({
-            status : 404,
-            message : "Key not available"
-
-        })
+        return reject404()
     }
     return rows[0]
    })
   
+}
+exports.removeComment = (id) =>{
+    return db.query('DELETE FROM comments WHERE comment_id = $1 RETURNING*',[id]).then(({rows}) =>{
+        if (rows.length === 0){
+           return reject404()
+        }
+        return rows[0]
+    })
 }

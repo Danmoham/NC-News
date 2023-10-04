@@ -330,3 +330,34 @@ test('Test for invalid ID',() =>{
 })
 })
 })
+
+describe('Deleting a comment',() =>{
+    test('testing if deletes a comment that is valid',() =>{
+
+ return request(app)
+    .delete(`/api/comments/1`)
+    .expect(204)
+    .then(() =>{
+     return request(app)
+     .get('/api/comments/1')
+     .expect(404)
+     
+    })
+    })
+    test('testing if comment not valid will return an error',() =>{
+        return request(app)
+        .delete(`/api/comments/1997464`)
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('Key not available')
+        })
+    }) 
+    test('testing if deletes a comment that is valid',() =>{
+
+        return request(app)
+           .delete(`/api/comments/hhuiii`)
+           .expect(400).then((response)=>{
+            expect(response.body.msg).toBe("The key you gave is not a number - Bad Request!")
+           })    })
+          
+        })
+
