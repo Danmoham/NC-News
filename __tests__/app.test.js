@@ -222,6 +222,7 @@ describe('checks specific articles comments',() =>{
         .get('/api/articles/4/comments')
         .expect(200).then((response) =>{
             expect(response.body.myComments).toEqual([])
+
         })
     })
     test('expect 404 error for an id that does not exist',() =>{
@@ -284,3 +285,14 @@ describe('posting a new comment to a specific article',() =>{
     })
     })
     
+        })
+    })
+    test('expect 404 error for an id that does not exist',() =>{
+        return request(app)
+        .get('/api/articles/9999/comments')
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe('Key not available')})
+    })
+})
+
+
