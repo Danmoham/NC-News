@@ -137,7 +137,6 @@ describe('Checks all Articles for the NC news',() =>{
         .get('/api/articles')
         .expect(200)
         .then(({body}) =>{
-            console.log(body.articles)
             body.articles.forEach((articles) =>{
                 expect(body.articles.length).toBe(13)
                 expect(typeof(articles.title)).toBe('string')
@@ -171,26 +170,7 @@ describe('Checks all Articles for the NC news',() =>{
     
 
 })
-describe('checks specific articles comments',() =>{
-    test('Response with correct comments',() =>{
-        return request(app)
-        .get('/api/articles/1/comments')
-        .expect(200)
-        .then(({body}) =>{
-            expect(body.myComments.length).toBe(11)
-            expect(body.myComments).toBeSortedBy('created_at', { descending : true})
-        body.myComments.forEach((comment) =>{
-            expect(typeof(comment.comment_id)).toBe('number')
-            expect(typeof(comment.body)).toBe('string')
-            expect(typeof(comment.article_id)).toBe('number')
-            expect(typeof(comment.author)).toBe('string')
-            expect(typeof(comment.votes)).toBe('number')
-            expect(typeof(comment.created_at)).toBe('string')
-        })
-    })
-})
 
-})
 describe('checks specific articles comments',() =>{
     test('Response with correct comments',() =>{
         return request(app)
@@ -261,7 +241,7 @@ describe('posting a new comment to a specific article',() =>{
         expect(response.body.msg).toBe('The name you gave is not a current user')
     })
     })
-    test('Tests for an invalid comment',() =>{
+    test('Tests for an invalid id',() =>{
         const myPost = {
             username : "butter_bridge",
             body : "Great article"

@@ -20,8 +20,8 @@ exports.getArticleByArticleId = (realRequest,realResponse,next) =>{
 
 }
 exports.getAllArticles = (realRequest,realResponse,next) =>{
-    fetchAllArticles().then((articles) =>{
-        realResponse.status(200).send({articles : articles})
+    fetchAllArticles().then((article) =>{
+        realResponse.status(200).send({articles : article})
     })
 }
 exports.getArticleIdComments = (realRequest,realResponse,next) =>{
@@ -43,8 +43,8 @@ exports.postCommentsToArticle = (realRequest,realResponse,next) =>{
     const promises = [fetchArticleById(params.article_id)]
     if (params.article_id){
         promises.push(addCommentsToArticle(realRequest.params.article_id,realRequest.body))
-    }
-    Promise.all(promises)        
+    } 
+    Promise.all(promises)
     .then((result) =>{
         realResponse.status(201).send(result[1])
     })
