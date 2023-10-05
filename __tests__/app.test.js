@@ -403,4 +403,22 @@ describe('Handling article query topic',() =>{
                 expect(response.body.articles).toEqual([])
     })
 })
+describe('Getting Api/users',() =>{
+    test('Expects 200 with all users',() =>{
+    return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({body}) =>{
+            expect(body.myUsers.length).toBe(4)
+            body.myUsers.forEach((user) =>{
+                expect(typeof (user.username)).toBe('string')
+                expect(typeof (user.name)).toBe('string')
+                expect(typeof (user.avatar_url)).toBe('string')
+                
+            })
+            expect(body.myUsers[0].username).toBe('butter_bridge')
+                expect(body.myUsers[0].name).toBe('jonny')
+                expect(body.myUsers[0].avatar_url).toBe('https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg')
+        })
+    })
 })

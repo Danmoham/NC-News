@@ -1,6 +1,6 @@
 const express = require('express')
 const seed = require('./db/seeds/seed')
-const {getAllTopics, getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments, postCommentsToArticle, patchArticleId, deleteComment} = require('./controllers/controllers')
+const {getAllTopics, getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments, postCommentsToArticle, patchArticleId, deleteComment, getAllUsers} = require('./controllers/controllers')
 
 
 const app = express()
@@ -14,7 +14,7 @@ app.get('/api/articles/:article_id/comments',getArticleIdComments)
 app.post('/api/articles/:article_id/comments',postCommentsToArticle)
 app.patch('/api/articles/:article_id',patchArticleId)
 app.delete('/api/comments/:comment_id',deleteComment)
-
+app.get('/api/users',getAllUsers)
 app.all('/*',(request, response) =>{
     response.status(404).send({ msg: 'URL does not exist'})
   })
