@@ -37,18 +37,15 @@ exports.fetchAllArticles = (query) =>{
                 return rows        
             })
             }else if ((Object.keys(query)[0]) === "sort_by"){
-                return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY $1 DESC`,[query.sort_by])
-                .then(({rows}) =>{
+                return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY ${query.sort_by} DESC`).then(({rows}) =>{
                     if (rows[0][query.sort_by]){
-                    return rows        
-                    }else{                            
-                        return reject400()
-                    }
+                    return rows     
+                    }   
                 })
             }else if ((Object.keys(query)[0]) === "order"){
                 const myQuery = query.order.toLowerCase()
                 if(myQuery === "asc"){
-                return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY articles.created_at ASC`).then(({rows}) =>{
+                return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY articles.created_at ASC`,).then(({rows}) =>{
                     return rows    })
                 }else if (myQuery === "desc"){
                     return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC`).then(({rows}) =>{

@@ -453,8 +453,9 @@ describe('Task 15 sort by and order by queries',() =>{
             .get('/api/articles?sort_by=comment_count')
             .expect(200)
             .then(({body}) =>{
-                expect(body.articles[0].comment_count).toBe(2)
+                expect(body.articles[0].comment_count).toBe(11)
                 expect(body.articles[5].comment_count).toBe(0)
+
             })
         })
         test('Testing a 200 using a order by ASC',() =>{
@@ -467,17 +468,16 @@ describe('Task 15 sort by and order by queries',() =>{
                 })
             
         })
-       /* test('testing a 200 using sort by author',() =>{
+        test('testing a 200 using sort by article id',() =>{
             return request(app)
-            .get('/api/articles?sort_by=author')
+            .get('/api/articles?sort_by=article_id')
                 .expect(200)
                 .then(({body}) =>{
-                    console.log(body.articles)
                     expect(body.articles).toBeSortedBy(body.articles.article_id)
-                    expect(body.articles[0].article_id).toBe(1)
-                    expect(body.articles[body.articles.length-1]).toBe(13)
+                    expect(body.articles[0].article_id).toBe(13)
+                    expect(body.articles[body.articles.length-1].article_id).toBe(1)
         })
-    }) */
+    }) 
         test('testing a 200 by DESC',() =>{
             return request(app)
             .get('/api/articles?order=desc')
