@@ -447,3 +447,51 @@ describe('Adding comment count to article ID',() =>{
     })
     
 })
+describe('Task 15 sort by and order by queries',() =>{
+        test('testing a 200 if using sort by',() =>{
+            return request(app)
+            .get('/api/articles?sort_by=comment_count')
+            .expect(200)
+            .then(({body}) =>{
+                expect(body.articles[0].comment_count).toBe(2)
+                expect(body.articles[5].comment_count).toBe(0)
+            })
+        })
+        test('Testing a 200 using a order by ASC',() =>{
+            return request(app)
+            .get('/api/articles?order=ASC')
+                .expect(200)
+                .then(({body}) =>{
+                    expect(body.articles[0].created_at).toBe('2020-01-07T14:08:00.000Z')
+                    expect(body.articles[body.articles.length-1].created_at).toBe('2020-11-03T09:12:00.000Z')
+                })
+            
+        })
+        test('testing a 200 by DESC',() =>{
+            return request(app)
+            .get('/api/articles?order=desc')
+            .expect(200)
+            .then(({body}) =>{
+                expect(body.articles[body.articles.length-1].created_at).toBe('2020-01-07T14:08:00.000Z')
+                expect(body.articles[0].created_at).toBe('2020-11-03T09:12:00.000Z')
+            })
+        })
+        test('Expect Sort by invalid to return 400',() =>{
+            return request(app)
+            .get('/api/articles?sort_by=lol')
+            .expect(400)
+            .then((response) =>{
+                expect(response.body.msg).toBe("Bad Request!")
+
+            })
+        })
+         test('Expect order invalid to return 400',() =>{
+            return request(app)
+            .get('/api/articles?order=nothing')
+            .expect(400)
+            .then((response) =>{
+                expect(response.body.msg).toBe("Bad Request!")
+
+            })
+        })
+})
