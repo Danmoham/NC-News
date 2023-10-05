@@ -88,7 +88,7 @@ describe('Testing for All Api list',() =>{
                 ]
               })
 
-              expect(body.endPointJson['GET /api/articles'].queries).toEqual(["author", "topic", "sort_by", "order"])
+              expect(body.endPointJson['GET /api/articles'].queries).toEqual(["author", "topic", "sort_by", "order"]) 
 
               expect(body.endPointJson['GET /api'].description).toBe('serves up a json representation of all the available endpoints of the api')
         })
