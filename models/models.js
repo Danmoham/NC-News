@@ -31,7 +31,7 @@ exports.fetchAllArticles = (query) =>{
     GROUP BY articles.article_id ORDER BY articles.created_at DESC`).then(({rows}) =>{
         return rows
     })}
-    
+
         if ((Object.keys(query)[0]) === "topic"){
             return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE topic = $1 GROUP BY articles.article_id ORDER BY articles.created_at DESC`,[query.topic]).then(({rows}) =>{
                 return rows        
@@ -57,7 +57,7 @@ exports.fetchAllArticles = (query) =>{
                     return reject400()}
                 }
 
-                return reject404()    }
+                return reject404()}
 
 
 exports.fetchArticleIdComments = (id) =>{
