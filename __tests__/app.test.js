@@ -361,6 +361,48 @@ describe('Deleting a comment',() =>{
           
         })
 
+describe('Handling article query topic',() =>{
+    test('expects to return queries with all specific topics',() =>{
+        return request(app)
+        .get('/api/articles?topic=mitch')
+        .expect(200)
+        .then(({body}) =>{
+            expect(body.articles.length).toBe(12)
+            body.articles.forEach((articles) =>{
+                expect(typeof(articles.title)).toBe('string')
+                expect(typeof(articles.author)).toBe('string')
+                expect(typeof(articles.article_id)).toBe('number')
+                expect(typeof(articles.created_at)).toBe('string')
+                expect(typeof(articles.votes)).toBe('number')
+                expect(typeof(articles.topic)).toBe('string')
+                expect(typeof(articles.article_img_url)).toBe('string')
+                expect(typeof(articles.comment_count)).toBe('number')
+            })
+               
+        })
+    })
+   
+    test('Expects queries that are not current queries to be a 404 error',() =>{
+        return request(app)
+        .get('/api/articles?lol=dan')
+        .expect(404).then((response) =>{
+            expect(response.body.msg).toBe("Key not available")
+        })
+    })
+    test('Test for 404 error with a topic that is undefined',() =>{
+        return request(app)
+        .get('/api/articles?topic=dan')
+            .expect(404).then((response) =>{
+                expect(response.body.msg).toBe("Key not available")
+            })
+    })
+    test('Test for 200 error with a topic that is undefined',() =>{
+        return request(app)
+        .get('/api/articles?topic=paper')
+            .expect(200).then((response) =>{
+                expect(response.body.articles).toEqual([])
+    })
+})
 describe('Getting Api/users',() =>{
     test('Expects 200 with all users',() =>{
     return request(app)
