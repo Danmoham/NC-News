@@ -467,6 +467,17 @@ describe('Task 15 sort by and order by queries',() =>{
                 })
             
         })
+       /* test('testing a 200 using sort by author',() =>{
+            return request(app)
+            .get('/api/articles?sort_by=author')
+                .expect(200)
+                .then(({body}) =>{
+                    console.log(body.articles)
+                    expect(body.articles).toBeSortedBy(body.articles.article_id)
+                    expect(body.articles[0].article_id).toBe(1)
+                    expect(body.articles[body.articles.length-1]).toBe(13)
+        })
+    }) */
         test('testing a 200 by DESC',() =>{
             return request(app)
             .get('/api/articles?order=desc')
