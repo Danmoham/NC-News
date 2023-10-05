@@ -380,3 +380,27 @@ describe('Getting Api/users',() =>{
         })
     })
 })
+
+describe('Adding comment count to article ID',() =>{
+    test('testing that it returns a comment count',() =>{
+    return request(app)
+    .get('/api/articles/1')
+    .expect(200)
+    .then(({body}) =>{
+        expect(typeof(body.myArticle.comment_count)).toBe('number')
+        expect(body.myArticle.comment_count).toBe(11)
+
+    })
+    })
+    test('test it will return a comment count when 0',() =>{
+        return request(app)
+    .get('/api/articles/4')
+    .expect(200)
+    .then(({body}) =>{
+        expect(typeof(body.myArticle.comment_count)).toBe('number')
+        expect(body.myArticle.comment_count).toBe(0)
+
+    })
+    })
+    
+})
