@@ -22,10 +22,12 @@ exports.getArticleByArticleId = (realRequest,realResponse,next) =>{
 }
 exports.getAllArticles = (realRequest,realResponse,next) =>{
     const {query} = realRequest
+    console.log(query)
     fetchAllArticles(query).then((article) =>{
         realResponse.status(200).send({articles : article})
     })
     .catch((err) =>{
+        console.log(err)
         next(err)
     })
 }

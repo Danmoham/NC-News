@@ -16,6 +16,7 @@ app.patch('/api/articles/:article_id',patchArticleId)
 app.delete('/api/comments/:comment_id',deleteComment)
 
 app.all('/*',(request, response) =>{
+  console.log(request.originalUrl)
     response.status(404).send({ msg: 'URL does not exist'})
   })
   app.use((err, req, res, next) => {
