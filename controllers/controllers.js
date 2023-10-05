@@ -1,4 +1,4 @@
-const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment} = require('../models/models')
+const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchAllUsers} = require('../models/models')
 const endPointJson = require('../endpoints.json')
 exports.getAllTopics = (realRequest,realResponse,next) =>{
     fetchAllTopics().then((topic) =>{
@@ -68,5 +68,10 @@ exports.deleteComment = (realRequest,realResponse,next) =>{
         next(err)
     })
     
+}
+exports.getAllUsers = (realRequest,realResponse,next) =>{
+    fetchAllUsers().then((users) =>{
+        realResponse.status(200).send({myUsers : users})
+    })
 }
 
