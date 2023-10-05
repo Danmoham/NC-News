@@ -8,10 +8,10 @@ exports.fetchAllTopics = () =>{
 }
 exports.fetchArticleById = (id) =>{
      const checkerId = parseInt(id)
-    return db.query(`SELECT * FROM articles WHERE article_id = $1`,[id])
-    .then(({rows}) =>{
+     return db.query(`SELECT articles.author,articles.title,articles.body, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1
+    GROUP BY articles.article_id`,[checkerId]).then(({rows}) =>{
         if (rows.length === 0){
-           return reject404()
+            return reject404()
         }
         return rows[0]
     })
