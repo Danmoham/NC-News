@@ -16,7 +16,6 @@ app.patch('/api/articles/:article_id',patchArticleId)
 app.delete('/api/comments/:comment_id',deleteComment)
 
 app.all('/*',(request, response) =>{
-  console.log(request.originalUrl)
     response.status(404).send({ msg: 'URL does not exist'})
   })
   app.use((err, req, res, next) => {
@@ -24,6 +23,9 @@ app.all('/*',(request, response) =>{
            res.status(400).send({msg : 'The key you gave is not a number - Bad Request!'})
     }else if (err.code === '23503'){
       res.status(404).send({msg: 'Part of your request is invalid'})
+  }else if (err.status === "42P01"){
+    res.status(err.status).send({msg : "This topic is not valid"})
+
   }else if (err.status) {
       res.status(err.status).send({ msg: err.message });
     } 

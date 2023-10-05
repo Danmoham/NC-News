@@ -1,4 +1,4 @@
-const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment} = require('../models/models')
+const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic} = require('../models/models')
 const endPointJson = require('../endpoints.json')
 const { query } = require('../db/connection')
 exports.getAllTopics = (realRequest,realResponse,next) =>{
@@ -22,12 +22,14 @@ exports.getArticleByArticleId = (realRequest,realResponse,next) =>{
 }
 exports.getAllArticles = (realRequest,realResponse,next) =>{
     const {query} = realRequest
-    console.log(query)
-    fetchAllArticles(query).then((article) =>{
-        realResponse.status(200).send({articles : article})
+    const promises = [fetchAllArticles(query)]
+    if(query.topic){
+        promises.push(fetchArticlesByTopic(query))
+    }
+    Promise.all(promises).then((article) =>{
+        realResponse.status(200).send({articles : article[0]})
     })
     .catch((err) =>{
-        console.log(err)
         next(err)
     })
 }

@@ -362,7 +362,7 @@ describe('Deleting a comment',() =>{
         })
 
 describe('Handling article query topic',() =>{
-    test.only('expects to return queries with all specific topics',() =>{
+    test('expects to return queries with all specific topics',() =>{
         return request(app)
         .get('/api/articles?topic=mitch')
         .expect(200)
@@ -393,14 +393,13 @@ describe('Handling article query topic',() =>{
         return request(app)
         .get('/api/articles?topic=dan')
             .expect(404).then((response) =>{
-                expect(response.body.msg).toBe("URL does not exist")
+                expect(response.body.msg).toBe("Key not available")
             })
     })
     test('Test for 200 error with a topic that is undefined',() =>{
         return request(app)
         .get('/api/articles?topic=paper')
             .expect(200).then((response) =>{
-                console.log(response.body)
                 expect(response.body.articles).toEqual([])
     })
 })
