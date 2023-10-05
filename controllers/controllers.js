@@ -1,4 +1,4 @@
-const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic} = require('../models/models')
+const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic, fetchAllUsers} = require('../models/models')
 
 const endPointJson = require('../endpoints.json')
 const { query } = require('../db/connection')

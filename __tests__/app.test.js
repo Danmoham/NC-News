@@ -403,6 +403,7 @@ describe('Handling article query topic',() =>{
                 expect(response.body.articles).toEqual([])
     })
 })
+})
 describe('Getting Api/users',() =>{
     test('Expects 200 with all users',() =>{
     return request(app)
