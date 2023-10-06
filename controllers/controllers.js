@@ -1,4 +1,4 @@
-const {fetchAllTopics, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic, fetchAllUsers} = require('../models/models')
+const {fetchAllTopics,advancedQueries, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic, fetchAllUsers} = require('../models/models')
 
 const endPointJson = require('../endpoints.json')
 const { query } = require('../db/connection')
@@ -24,7 +24,7 @@ exports.getArticleByArticleId = (realRequest,realResponse,next) =>{
 exports.getAllArticles = (realRequest,realResponse,next) =>{
     const {query} = realRequest
     const promises = [fetchAllArticles(query)]
-    if(query.topic){
+    if(query.topic && Object.keys(query).length === 1){
         promises.push(fetchArticlesByTopic(query))
     }
     Promise.all(promises).then((article) =>{

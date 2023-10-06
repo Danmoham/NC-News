@@ -505,4 +505,40 @@ describe('Task 15 sort by and order by queries',() =>{
 
             })
         })
+        test('testing for chaining queries ',() =>{
+            return request(app)
+            .get('/api/articles?sort_by=article_id&order=asc')
+            .expect(200).then(({body}) =>{
+                expect(body.articles[body.articles.length-1].article_id).toBe(13)
+                expect(body.articles[0].article_id).toBe(1)
+            })
+            
+        })
+        test('testing for errors with chaining queries',() =>{
+            return request(app)
+            .get('/api/articles?sort_by=article_id&order=heh')
+            .expect(400)
+            .then((response) =>{
+                expect(response.body.msg).toBe("Bad Request!")
+
+            })
+        })
+        test('testing for errors with chaining queries',() =>{
+            return request(app)
+            .get('/api/articles?sort_by=logwfheo&order=ASC')
+            .expect(400)
+            .then((response) =>{
+                expect(response.body.msg).toBe("Bad Request!")
+
+            })
+        })
+        test('Testing for ordering by title',() =>{
+            return request(app)
+            .get('/api/articles?sort_by=title&order=ASC')
+            .expect(200)
+            .then(({body}) =>{
+          expect(body.articles[0].title).toBe("A")
+          expect(body.articles[12].title).toBe("Z")
+            })
+        }) 
 })
