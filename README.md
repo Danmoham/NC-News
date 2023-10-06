@@ -1,6 +1,6 @@
 # Northcoders News API
 
-This API has been created using express JS with node to set up various end points for different types of data using PSQL to traverse the database. The link to the project which has been hosted is: https://dansnews.onrender.com/, please note if you want to do a post or patch request I would recommend using insomnia to do this. If you want to find all the possible API's please use the /API get request which will take you to a page which shows each request you can make as well as the example on there.
+This API has been created using express JS with node to set up various end points for different types of data using PSQL to traverse the database. The link to the project which has been hosted is: https://dansnews.onrender.com/api, please note if you want to do a post or patch request I would recommend using insomnia to do this. If you want to find all the possible API's please use the /API get request which will take you to a page which shows each request you can make as well as the example on there.
 
 For anyone wishing to do this locally you will have to git clone this folder so you have all the relevant information, then you will need to set a PGDatabase to the following below "PGDATABASE=nc_news" for the full database and PGDATABASE="nc_news_test" for the test database, please ensure these are in the files .env-test and .env-development. Please also ensure that these two files are .gitignored. 
 
