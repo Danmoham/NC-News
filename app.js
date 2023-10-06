@@ -1,5 +1,5 @@
 const express = require('express')
-const {getAllTopics, patchComment,getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments,getSpecifcUsername, postCommentsToArticle, patchArticleId, deleteComment, getAllUsers} = require('./controllers/controllers')
+const {getAllTopics, patchComment,getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments,getSpecifcUsername, postCommentsToArticle, patchArticleId, deleteComment, getAllUsers, postArticles} = require('./controllers/controllers')
 
 
 const app = express()
@@ -16,6 +16,7 @@ app.delete('/api/comments/:comment_id',deleteComment)
 app.get('/api/users',getAllUsers)
 app.get('/api/users/:username',getSpecifcUsername)
 app.patch('/api/comments/:commentid',patchComment)
+app.post('/api/articles',postArticles)
 
 app.all('/*',(request, response) =>{
     response.status(404).send({ msg: 'URL does not exist'})
@@ -26,6 +27,8 @@ app.all('/*',(request, response) =>{
            res.status(400).send({msg : 'The key you gave is not a number - Bad Request!'})
     }else if (err.code === '23503'){
       res.status(404).send({msg: 'Part of your request is invalid'})
+    }else if (err.code=== `23502`){
+      res.status(400).send({msg : "This is not a key in this table. Bad Request!"})
     }else if (err.code === '42703'){
       res.status(400).send({msg : "Bad Request!"})
   }else if (err.status) {

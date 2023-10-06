@@ -33,9 +33,6 @@ exports.fetchAllArticles = (query) =>{
     GROUP BY articles.article_id ORDER BY articles.created_at DESC`).then(({rows}) =>{
         return rows
     })
-    .catch((err) =>{
-        console.log(err)
-    })
 }     
         if (((Object.keys(query)[0]) === "topic") && (Object.keys(query).length === 1)){
             return db.query(`SELECT articles.author,articles.title, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE topic = $1 GROUP BY articles.article_id ORDER BY articles.created_at DESC`,[query.topic]).then(({rows}) =>{
@@ -119,5 +116,17 @@ exports.mutateComment = (commentId, increment) =>{
     }
     return db.query(`UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`,[increment, commentId]).then(({rows}) =>{
         return rows[0]
+    })
+}
+
+exports.newArticle = (article) =>{
+    return db.query(`INSERT INTO articles (author, topic, body,title,article_img_url) Select $1,$2,$3,$4,$5 Returning*`,[article.author,article.topic,article.body,article.title,article.article_img_url]).then(({rows}) =>{
+        return rows[0]
+    }).then((myArticle)=>{
+        return db.query(`SELECT articles.author,articles.title,articles.body, articles.article_id, articles.topic, articles.created_at,articles.votes, articles.article_img_url,CAST(count(comments.article_id)as INTEGER) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1
+        GROUP BY articles.article_id`,[myArticle.article_id])
+    .then(({rows}) =>{
+        return rows[0]
+    })
     })
 }

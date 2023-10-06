@@ -1,4 +1,4 @@
-const {fetchAllTopics,mutateComment, fetchSpecificUser, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic, fetchAllUsers} = require('../models/models')
+const {fetchAllTopics,mutateComment,newArticle, fetchSpecificUser, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic, fetchAllUsers} = require('../models/models')
 
 const endPointJson = require('../endpoints.json')
 const { query } = require('../db/connection')
@@ -98,6 +98,14 @@ exports.patchComment = (realRequest,realResponse,next) => {
     mutateComment(params.commentid,realRequest.body.inc_votes).then((comment) =>{
         realResponse.status(200).send({updatedComment : comment})
 
+    })
+    .catch((err) =>{
+        next(err)
+    })
+}
+exports.postArticles = (realRequest,realResponse,next) =>{
+    newArticle(realRequest.body).then((article) =>{
+    realResponse.status(201).send({my_article : article})
     })
     .catch((err) =>{
         next(err)

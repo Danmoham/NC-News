@@ -138,8 +138,8 @@ describe('Checks all Articles for the NC news',() =>{
         .get('/api/articles')
         .expect(200)
         .then(({body}) =>{
+            expect(body.articles.length).toBe(13)
             body.articles.forEach((articles) =>{
-                expect(body.articles.length).toBe(13)
                 expect(typeof(articles.title)).toBe('string')
                 expect(typeof(articles.author)).toBe('string')
                 expect(typeof(articles.article_id)).toBe('number')
@@ -604,5 +604,83 @@ test('Returns bad request if votes not a number',() =>{
    .then ((response) => {
     expect(response.body.msg).toBe('Bad Request!')
 })
+})
+})
+
+describe('Posting a new article',() =>{
+    test('testing if new article is added',() =>{
+    const myPost = {
+        author : "icellusedkars",
+        topic : "mitch",
+        body : "Many people know Watson as the IBM-developed cognitive super computer that won the Jeopardy! gameshow in 2011. In truth, Watson is not actually a computer but a set of algorithms and APIs, and since winning TV fame (and a $1 million prize) IBM has put it to use tackling tough problems in every industry from healthcare to finance. Most recently, IBM has announced several new partnerships which aim to take things even further, and put its cognitive capabilities to use solving a whole new range of problems around the world.",
+        article_img_url : "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        title : "my life"
+    }
+    return request(app)
+    .post('/api/articles/').send(myPost)
+    .expect(201)
+    .then(({_body}) =>{
+        expect(_body.my_article.article_id).toBe(14)
+        expect(_body.my_article.title).toBe('my life')
+        expect(_body.my_article.topic).toBe('mitch')
+        expect(_body.my_article.author).toBe('icellusedkars')
+        expect(_body.my_article.votes).toBe(0)
+        expect(typeof(_body.my_article.created_at)).toBe('string')
+        expect(typeof (_body.my_article.comment_count)).toBe('number')
+        return request(app)
+        .get('/api/articles/')
+        .expect(200)
+        .then(({body}) =>{
+            expect(body.articles.length).toBe(14)
+
+        })
+    })
+})
+test('Will default if not give article img url',() =>{
+    const myPost = {
+        author : "icellusedkars",
+        topic : "mitch",
+        body : "Many people know Watson as the IBM-developed cognitive super computer that won the Jeopardy! gameshow in 2011. In truth, Watson is not actually a computer but a set of algorithms and APIs, and since winning TV fame (and a $1 million prize) IBM has put it to use tackling tough problems in every industry from healthcare to finance. Most recently, IBM has announced several new partnerships which aim to take things even further, and put its cognitive capabilities to use solving a whole new range of problems around the world.",
+        title : "my life"
+    }
+    return request(app)
+    .post('/api/articles/').send(myPost)
+    .expect(201)
+    .then(({_body}) =>{
+        expect(typeof(_body.my_article.article_img_url)).toBe('object'),
+        expect(_body.my_article.article_id).toBe(14)
+        expect(_body.my_article.title).toBe('my life')
+        expect(_body.my_article.topic).toBe('mitch')
+        expect(_body.my_article.author).toBe('icellusedkars')
+        expect(_body.my_article.votes).toBe(0)
+})
+})
+test('Testing for invalid value',() =>{
+    const myPost = {
+        author : "icellusedkars",
+        topic : "jefeifoefneofef",
+        body : "Many people know Watson as the IBM-developed cognitive super computer that won the Jeopardy! gameshow in 2011. In truth, Watson is not actually a computer but a set of algorithms and APIs, and since winning TV fame (and a $1 million prize) IBM has put it to use tackling tough problems in every industry from healthcare to finance. Most recently, IBM has announced several new partnerships which aim to take things even further, and put its cognitive capabilities to use solving a whole new range of problems around the world.",
+        title : "my life"
+    }
+    return request(app)
+    .post('/api/articles/').send(myPost)
+    .expect(404)
+    .then((response) =>{
+        expect(response.body.msg).toBe("Part of your request is invalid")
+    })
+}),
+test('Testing for invalid key',() =>{
+    const myPost = {
+        author : "icellusedkars",
+        topp : "mitch",
+        body : "Many people know Watson as the IBM-developed cognitive super computer that won the Jeopardy! gameshow in 2011. In truth, Watson is not actually a computer but a set of algorithms and APIs, and since winning TV fame (and a $1 million prize) IBM has put it to use tackling tough problems in every industry from healthcare to finance. Most recently, IBM has announced several new partnerships which aim to take things even further, and put its cognitive capabilities to use solving a whole new range of problems around the world.",
+        title : "my life"
+    }
+    return request(app)
+    .post('/api/articles/').send(myPost)
+    .expect(400)
+    .then((response) =>{
+        expect(response.body.msg).toBe("This is not a key in this table. Bad Request!")
+    })
 })
 })
