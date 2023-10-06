@@ -5,6 +5,7 @@ const seed = require ('../db/seeds/seed')
 
 const {articleData,commentData, topicData, userData} = require('../db/data/test-data/index')
 const articles = require('../db/data/test-data/articles')
+const e = require('express')
 
 beforeEach(() =>{
     return seed({topicData, userData, articleData, commentData})
@@ -541,4 +542,26 @@ describe('Task 15 sort by and order by queries',() =>{
           expect(body.articles[12].title).toBe("Z")
             })
         }) 
+})
+
+describe('Number 17 getting specific user',() =>{
+    test('Testing returns a 200 status code and returns correct user',() =>{
+        return request(app)
+        .get('/api/users/icellusedkars')
+        .expect(200)
+        .then(({body}) =>{
+            expect(body.user.name).toBe('sam')
+expect(body.user.avatar_url).toBe("https://avatars2.githubusercontent.com/u/24604688?s=460&v=4")
+expect(body.user.username).toBe('icellusedkars')
+        })
+    })
+
+    test('Testing for invalid user that does not exist',()=>{
+        return request(app)
+        .get('/api/users/hehehe')
+        .expect(404)
+        .then((response) =>{
+            expect(response.body.msg).toBe("Username not valid")
+    })
+})
 })

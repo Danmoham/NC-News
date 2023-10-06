@@ -1,4 +1,4 @@
-const {fetchAllTopics,advancedQueries, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic, fetchAllUsers} = require('../models/models')
+const {fetchAllTopics,fetchSpecificUser, fetchArticleById, fetchAllArticles, fetchArticleIdComments, addCommentsToArticle, patchVoteCount, removeComment, fetchArticlesByTopic, fetchAllUsers} = require('../models/models')
 
 const endPointJson = require('../endpoints.json')
 const { query } = require('../db/connection')
@@ -85,3 +85,11 @@ exports.getAllUsers = (realRequest,realResponse,next) =>{
     })
 }
 
+exports.getSpecifcUsername = (realRequest,realResponse,next) =>{
+    fetchSpecificUser(realRequest.params.username).then((myUser) =>{
+    realResponse.status(200).send({user : myUser})
+    })
+    .catch((err) =>{
+        next(err)
+    })
+}

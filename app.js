@@ -1,6 +1,5 @@
 const express = require('express')
-const seed = require('./db/seeds/seed')
-const {getAllTopics, getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments, postCommentsToArticle, patchArticleId, deleteComment, getAllUsers} = require('./controllers/controllers')
+const {getAllTopics, getAllApi, getArticleByArticleId, getAllArticles, getArticleIdComments,getSpecifcUsername, postCommentsToArticle, patchArticleId, deleteComment, getAllUsers} = require('./controllers/controllers')
 
 
 const app = express()
@@ -15,9 +14,12 @@ app.post('/api/articles/:article_id/comments',postCommentsToArticle)
 app.patch('/api/articles/:article_id',patchArticleId)
 app.delete('/api/comments/:comment_id',deleteComment)
 app.get('/api/users',getAllUsers)
+app.get('/api/users/:username',getSpecifcUsername)
+
 app.all('/*',(request, response) =>{
     response.status(404).send({ msg: 'URL does not exist'})
   })
+
   app.use((err, req, res, next) => {
     if (err.code === '22P02'){
            res.status(400).send({msg : 'The key you gave is not a number - Bad Request!'})
