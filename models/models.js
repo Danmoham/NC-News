@@ -113,3 +113,11 @@ exports.fetchSpecificUser = (user) =>{
         return rows[0]
     })
 }
+exports.mutateComment = (commentId, increment) =>{
+    if (increment === undefined){
+        return reject400()
+    }
+    return db.query(`UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`,[increment, commentId]).then(({rows}) =>{
+        return rows[0]
+    })
+}

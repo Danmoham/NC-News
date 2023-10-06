@@ -565,3 +565,44 @@ expect(body.user.username).toBe('icellusedkars')
     })
 })
 })
+
+describe('Creating a patch request to add a new upvote to a comment',() =>{
+    test('Testing for a 200 and testing comment is returned',() =>{
+        const voteUpdate = {
+            inc_votes : 6
+        }
+        return request(app).patch('/api/comments/1')
+       .send(voteUpdate)
+       .expect(200)
+       .then (({body}) => {
+        expect(body.updatedComment).toMatchObject({
+            comment_id : 1,
+            votes : 22,
+            author: "butter_bridge"
+        })
+    })
+
+})
+test('Returns bad request if votes not a number',() =>{
+    const voteUpdate = {
+        inc_votes : "ugihoh"
+    }
+    return request(app).patch('/api/comments/1')
+   .send(voteUpdate)
+   .expect(400)
+   .then ((response) => {
+    expect(response.body.msg).toBe('The key you gave is not a number - Bad Request!')
+})
+})
+test('Returns bad request if votes not a number',() =>{
+    const voteUpdate = {
+        incvotes : 4
+    }
+    return request(app).patch('/api/comments/1')
+   .send(voteUpdate)
+   .expect(400)
+   .then ((response) => {
+    expect(response.body.msg).toBe('Bad Request!')
+})
+})
+})
