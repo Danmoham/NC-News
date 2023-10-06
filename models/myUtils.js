@@ -12,5 +12,4 @@ exports.reject400 = () =>{
         message : "Bad Request!"
 
     })
-     
 }
