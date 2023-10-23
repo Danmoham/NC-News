@@ -36,7 +36,7 @@ app.all('/*',(request, response) =>{
       res.status(err.status).send({ msg: err.message });
     } 
     else {
-      res.status(500).send({ message: 'Internal server error' });
+      res.status(500).send({ message: err });
     }
   });
  
